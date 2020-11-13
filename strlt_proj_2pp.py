@@ -264,8 +264,9 @@ def main():
     
     w1 = load_variables('./word_to_vec_map_1.pickle')
     w2 = load_variables('./word_to_vec_map_2.pickle')
-    word_to_vec_map = w1.update(w2)
-    st.text(word_to_vec_map['unknown'])
+    word_to_vec_map = w1.copy()
+    word_to_vec_map = word_to_vec_map.update(w2)
+    
     
     build_model = st.sidebar.checkbox("Check to build model otherwise pretrained model will be loaded")
     
@@ -314,7 +315,7 @@ def main():
             
             #clean up input
             user_data = cleanX(np.array([user_data]))
-
+            
             #make prediction
             pred,_ = predict(user_data, np.array([1]), W, b, word_to_vec_map)
             out = label_to_type(pred[0])

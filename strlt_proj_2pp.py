@@ -234,6 +234,12 @@ def model(X, Y, word_to_vec_map, learning_rate = 0.01, num_iterations = 300):
     return pred, W, b
 
 
+def load_variables(fname):
+    f = open(fname,'r')
+    x = pickle.load(f)
+    f.close()
+    return x
+
 def main():
     st.title("Identify the presence of Greetings")
     
@@ -254,9 +260,16 @@ def main():
         
     #load pre-trained word embeddings
     #word embeddings download from https://github.com/uclnlp/inferbeddings/blob/master/data/glove/
-    fname2 = './glove.6B.50d.dat'
-
-    word_to_index, index_to_word, word_to_vec_map = read_glove_vecs(fname2)
+    #fname2 = './glove.6B.50d.dat'
+    
+    # word_to_index, index_to_word, word_to_vec_map = read_glove_vecs(fname2)
+    
+    w1 = load_variable('./word_to_vec_map.pickle1')
+    w2 = load_variable('./word_to_vec_map.pickle2')
+    word_to_vec_map = w1.update(w2)
+    
+    index_to_word = load('./index_to_word.pickle')
+    word_to_index = load('./word_to_index.pickle')
     
     build_model = st.sidebar.checkbox("Check to build model otherwise pretrained model will be loaded")
     

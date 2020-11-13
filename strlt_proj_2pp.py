@@ -10,6 +10,7 @@ import streamlit as st
 import numpy as np
 import csv
 import mpu
+import h5py
 
 def read_glove_vecs(glove_file):
     with open(glove_file, 'r') as f:
@@ -302,11 +303,17 @@ def main():
     else:
         
         #load pretrained parameters
-        filename = './trained_model_params.pickle'
+        # filename = './trained_model_params.pickle'
     
-        gh = mpu.io.read(filename)
-        W = gh['W']
-        b = gh['b']
+        # gh = mpu.io.read(filename)
+        # W = gh['W']
+        # b = gh['b']
+
+        filename = './trained_models_we.h5'
+    
+        ft = h5py.File(filename,'r')
+        W = ft['W']
+        b = ft['b']
         
         #request user input
         user_data=[]

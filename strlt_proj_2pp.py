@@ -326,7 +326,7 @@ def main():
             #make prediction
             pred,_ = predict(user_data, np.array([1]), W, b, word_to_vec_map)
             out = label_to_type(pred[0])
-            st.write(pred[0])
+            st.write('Probability is ',str(pred[0]))
             st.write('Your sentence ', out.lower())
         
 if __name__ == "__main__":

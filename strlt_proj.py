@@ -91,7 +91,7 @@ def cleanX(X):
             else:
                 new_nh.append(j)
         X[h] = ' '.join(new_nh)
-    X = np.asarray([x if len(x.strip()) > 0 else 'empty input' for x in X])
+    # X = np.asarray([x if len(x.strip()) > 0 else 'empty input' for x in X])
     return X
 
               

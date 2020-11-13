@@ -262,12 +262,10 @@ def main():
     
     # word_to_index, index_to_word, word_to_vec_map = read_glove_vecs(fname2)
     
-    w1 = load_variable('./word_to_vec_map_1.pickle')
-    w2 = load_variable('./word_to_vec_map_2.pickle')
+    w1 = load_variables('./word_to_vec_map_1.pickle')
+    w2 = load_variables('./word_to_vec_map_2.pickle')
     word_to_vec_map = w1.update(w2)
     
-    index_to_word = load('./index_to_word.pickle')
-    word_to_index = load('./word_to_index.pickle')
     
     build_model = st.sidebar.checkbox("Check to build model otherwise pretrained model will be loaded")
     

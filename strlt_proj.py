@@ -379,6 +379,9 @@ def model_lstm(X_train,Y_train,maxLen, word_to_vec_map, word_to_index):
     #train the model for 50 epochs with minibatching
     model.fit(X_train_indices, Y_train_oh, epochs = 20, batch_size = 32, shuffle=True)
         
+    fname = 'trained_models_lstm_v2.h5'
+    model.save(fname)
+    
     return model
 
 def load_variables(fname):
@@ -505,7 +508,7 @@ def main():
         elif(choose_model == "LSTM"):
             
             # load model
-            fname = './trained_models_lstm.h5'
+            fname = './trained_models_lstm_v2.h5'
             model = load_model(fname)
             
             #request user input

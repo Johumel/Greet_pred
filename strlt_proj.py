@@ -582,6 +582,10 @@ def main():
                 st.write("whoops! I couldn't load the lstm model into streamlit. Training a new lstm model ...")
                 model = build_lstm_model()
                 
+                maxLen = 10
+                #load word vector map
+                _,_,_,_,_,word_to_index = load_input()
+                
                 #request user input
                 user_data = []
                 user_data = st.text_input("Enter sentence here: ",key="lstm_built")

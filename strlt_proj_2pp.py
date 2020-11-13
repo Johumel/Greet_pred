@@ -314,7 +314,7 @@ def main():
             
             #clean up input
             user_data = cleanX(np.array([user_data]))
-            st.write(user_data)
+            st.text(user_data)
             #make prediction
             pred,_ = predict(user_data, np.array([1]), W, b, word_to_vec_map)
             out = label_to_type(pred[0])

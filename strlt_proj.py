@@ -187,8 +187,6 @@ def model_we(X, Y, word_to_vec_map, learning_rate = 0.01, num_iterations = 400):
     b -- bias of the softmax layer, of shape (n_y,)
     """
     
-    np.random.seed(1)
-
     # Define number of training examples
     m = Y.shape[0]                          # number of training examples
     n_y = 1                                 # number of classes  
@@ -411,7 +409,7 @@ def main():
             
             #train your model
             st.text("Building WE model .... ")
-            pred, W, b = model(X_train, Y_train, word_to_vec_map)
+            pred, W, b = model_we(X_train, Y_train, word_to_vec_map)
             st.text("Done building WE model ")
             
             #evaluate model performance

@@ -513,7 +513,7 @@ def main():
              
             # load json and create model
             jf = open(fname.replace('h5','json'), 'r')
-            model_json = json_file.read()
+            model_json = jf.read()
             jf.close()
             model = model_from_json(model_json)
             

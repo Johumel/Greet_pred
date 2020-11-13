@@ -91,7 +91,7 @@ def cleanX(X):
             else:
                 new_nh.append(j)
         X[h] = ' '.join(new_nh)
-    # X = np.asarray([x if len(x.strip()) > 0 else 'empty input' for x in X])
+    X = np.asarray([x if len(x.strip()) > 0 else 'empty input' for x in X])
     return X
 
               
@@ -510,11 +510,11 @@ def main():
             
             #request user input
             user_data=[]
-            user_data = st.text_input("Enter sentence here: ",key="lstm_loaded")
+            user_data = st.text_input("Enter sentence here: ")
             if (user_data):
     
                 # make prediction
-                X_indices = s_2_i(cleanX(np.array([user_data])), word_to_index, maxLen)
+                X_indices = s_2_i(cleanX([user_data]), word_to_index, maxLen)
                 pred = model.predict(X_indices)
                 out = label_to_type(pred[0])
                 st.write('Probability is ',str(pred[0]))

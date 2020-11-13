@@ -417,33 +417,23 @@ def build_we_model():
     
     X_train,Y_train,X_test,Y_test,word_to_vec_map,_ = load_input()
     #train your model
-    st.text("Building WE model .... ")
-    pred, W, b = model_we(X_train, Y_train, word_to_vec_map)
-    st.text("Done building WE model ")
+    # st.text("Building WE model .... ")
+    with st.spinner("Building WE model"):
+        pred, W, b = model_we(X_train, Y_train, word_to_vec_map)
+        st.text("Done building WE model ")
     
     #evaluate model performance
-    st.text("Evaluating model performance .... ")
-    pred_train,accur_train = predict(X_train, Y_train, W, b, word_to_vec_map)
-    pred_test,accur_test = predict(X_test, Y_test, W, b, word_to_vec_map)
-    st.text("Accuracy of training set is: ")
-    st.write('%.1f' % accur_train)
-    st.text("Accuracy of test set is: ")
-    st.write('%.1f' % accur_test)
-    st.text("Done evaluating model performance")
-
-    #request user input
-    user_data = st.text_input("Enter sentence here: ",key="we_built")	
+    with st.spinner("Evaluating model performance"):
+    # st.text("Evaluating model performance .... ")
+        pred_train,accur_train = predict(X_train, Y_train, W, b, word_to_vec_map)
+        pred_test,accur_test = predict(X_test, Y_test, W, b, word_to_vec_map)
+        st.text("Accuracy of training set is: ")
+        st.write('%.1f' % accur_train)
+        st.text("Accuracy of test set is: ")
+        st.write('%.1f' % accur_test)
+        st.text("Done evaluating model performance")
     
-    #clean up input
-    user_data = cleanX(np.array([user_data]))
-    
-    #make prediction
-    pred,_ = predict(user_data, np.array([1]), W, b, word_to_vec_map)
-    out = label_to_type(pred[0])
-    st.write('Probability is ',str(pred[0]))
-    st.write('Your sentence ', out.lower())
-    
-    return None
+    return W,b
 
 
 def build_lstm_model():
@@ -455,29 +445,23 @@ def build_lstm_model():
     
     X_train,Y_train,X_test,Y_test,word_to_vec_map,word_to_index = load_input()
     
-    st.text("Building lstm model .... ")
-    model = model_lstm(X_train,Y_train,maxLen, word_to_vec_map, word_to_index)
-    st.text("Done building lstm model ")
+    #st.text("Building lstm model .... ")
+    with st.spinner("Building lstm model"):
+        model = model_lstm(X_train,Y_train,maxLen, word_to_vec_map, word_to_index)
+        st.text("Done building lstm model ")
     
     #evaluate model on test set
     X_test_indices = s_2_i(X_test, word_to_index, maxLen)
     Y_test_oh = np.asarray([[i] for i in Y_test])
     
-    st.text("Evaluating model performance .... ")
-    loss, acc = model.evaluate(X_test_indices, Y_test_oh)
-    st.text("Accuracy of test set is: ")
-    st.write(round(acc,2))
-    st.text("Done evaluating model performance")
-
-    #request user input
-    user_data = st.text_input("Enter sentence here: ",key="lstm_built")	
-    X_indices = s_2_i(cleanX(np.array([user_data])), word_to_index, maxLen)
-    pred = model.predict(X_indices)
-    out = label_to_type(pred[0])
-    st.write('Probability is ',str(pred[0]))
-    st.write('Your sentence ', out.lower()) 
+    with st.spinner("Evaluating model performance"):
+        # st.text("Evaluating model performance .... ")
+        loss, acc = model.evaluate(X_test_indices, Y_test_oh)
+        st.text("Accuracy of test set is: ")
+        st.write(round(acc,2))
+        st.text("Done evaluating model performance")
     
-    return None
+    return model
 
 def main():
     st.title("Identify the presence of a Greetings")
@@ -488,12 +472,46 @@ def main():
         		[ "WE", "LSTM"])
         
         if (choose_model == "WE"):
-            build_we_model()
+            W,b = build_we_model()
+            choose_model = []
             
-
+            #request user input
+            user_data = []
+            user_data = st.text_input("Enter sentence here: ",key="we_built")	
+            if user_data:
+            
+                #load word vector map
+                _,_,_,_,word_to_vec_map,_ = load_input()
+                
+                #clean up input
+                user_data = cleanX(np.array([user_data]))
         
+                #make prediction
+                pred,_ = predict(user_data, np.array([1]), W, b, word_to_vec_map)
+                out = label_to_type(pred[0])
+                st.write('Probability is ',str(pred[0]))
+                st.write('Your sentence ', out.lower())
+                
+            st.write('For an even better performance checkout the LSTM model')
+            
         elif (choose_model == "LSTM"):
-            build_lstm_model()
+            model = build_lstm_model()
+            choose_model = []
+            
+            maxLen = 10
+            
+            #load word vector map
+            _,_,_,_,_,word_to_index = load_input()
+            
+            #request user input
+            user_data = []
+            user_data = st.text_input("Enter sentence here: ",key="lstm_built")
+            if 	user_data:
+                X_indices = s_2_i(cleanX(np.array([user_data])), word_to_index, maxLen)
+                pred = model.predict(X_indices)
+                out = label_to_type(pred[0])
+                st.write('Probability is ',str(pred[0]))
+                st.write('Your sentence ', out.lower()) 
     
     else:
         choose_model = st.sidebar.selectbox("Choose the NLP model",
@@ -524,6 +542,7 @@ def main():
                 out = label_to_type(pred[0])
                 st.write('Probability is ',str(pred[0]))
                 st.write('Your sentence ', out.lower())
+            st.write('For an even better performance checkout the LSTM model')
         
 
         elif(choose_model == "LSTM"):
@@ -560,8 +579,18 @@ def main():
                     st.write('Probability is ',str(pred[0]))
                     st.write('Your sentence ', out.lower()) 
             except:
-                st.write("whoops! I couldn't load the keras model into streamlit. Training a new lstm model ...")
-                build_lstm_model()
+                st.write("whoops! I couldn't load the lstm model into streamlit. Training a new lstm model ...")
+                model = build_lstm_model()
+                
+                #request user input
+                user_data = []
+                user_data = st.text_input("Enter sentence here: ",key="lstm_built")
+                if 	user_data:
+                    X_indices = s_2_i(cleanX(np.array([user_data])), word_to_index, maxLen)
+                    pred = model.predict(X_indices)
+                    out = label_to_type(pred[0])
+                    st.write('Probability is ',str(pred[0]))
+                    st.write('Your sentence ', out.lower()) 
                 pass
     
 if __name__ == "__main__":

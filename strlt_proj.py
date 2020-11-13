@@ -171,7 +171,7 @@ def sentence_to_avg(sentence, word_to_vec_map,i):
 #Build the predictor model
 # @st.cache()
 def model_we(X, Y, word_to_vec_map, learning_rate = 0.01, num_iterations = 400):
-     """
+    """
     Model to train word vector representations in numpy.
     
     Arguments:
@@ -195,7 +195,7 @@ def model_we(X, Y, word_to_vec_map, learning_rate = 0.01, num_iterations = 400):
     # Initialize parameters using Xavier initialization
     W = np.random.randn(n_y, n_h) / np.sqrt(n_h)
     b = np.zeros((n_y,))
-
+    
     
     # Optimization loop
     for t in range(num_iterations): # Loop over the number of iterations
@@ -204,11 +204,11 @@ def model_we(X, Y, word_to_vec_map, learning_rate = 0.01, num_iterations = 400):
             
             # Average the word vectors of the words from the i'th training example
             avg = sentence_to_avg(X[i], word_to_vec_map)
-
+    
             # Forward propagate the avg through the softmax layer
             z = np.dot(W,avg)+b
             a = sigmoid(z)
-
+    
             # Compute cost
             cost += -1*(Y[i]*np.log(a)[0] -(1-Y[i])*np.log(1-a))
             
@@ -216,7 +216,7 @@ def model_we(X, Y, word_to_vec_map, learning_rate = 0.01, num_iterations = 400):
             dz = a - Y[i]
             dW = np.dot(dz.reshape(n_y,1), avg.reshape(1, n_h))
             db = dz
-
+    
             # Update parameters with Stochastic Gradient Descent
             W = W - learning_rate * dW
             b = b - learning_rate * db

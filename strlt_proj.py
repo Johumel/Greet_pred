@@ -505,7 +505,7 @@ def main():
         elif(choose_model == "LSTM"):
             
             # load model
-            fname = './trained_models_lstm.h5'
+            fname = './trained_models_lstm.keras'
             
             model = load_model(fname)
              

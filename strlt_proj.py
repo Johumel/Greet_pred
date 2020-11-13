@@ -431,6 +431,7 @@ def main():
             #make prediction
             pred,_ = predict(user_data, np.array([1]), W, b, word_to_vec_map)
             out = label_to_type(pred[0])
+            st.write('Probability is ',str(pred[0]))
             st.write('Your sentence ', out.lower())
         
         elif (choose_model == "LSTM"):
@@ -453,6 +454,7 @@ def main():
             X_indices = s_2_i(cleanX(np.array([user_data])), word_to_index, maxLen)
             pred = model.predict(X_indices)
             out = label_to_type(pred[0])
+            st.write('Probability is ',str(pred[0]))
             st.write('Your sentence ', out.lower()) # Inverse transform to get the original dependent value. 
     
     else:
@@ -498,6 +500,7 @@ def main():
                 X_indices = s_2_i(cleanX(np.array([user_data])), word_to_index, maxLen)
                 pred = model.predict(X_indices)
                 out = label_to_type(pred[0])
+                st.write('Probability is ',str(pred[0]))
                 st.write('Your sentence ', out.lower()) 
     
 if __name__ == "__main__":

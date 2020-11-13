@@ -250,8 +250,7 @@ def main():
         
     #load pre-trained word embeddings
     #word embeddings download from https://github.com/uclnlp/inferbeddings/blob/master/data/glove/
-    /Users/john.onwuemeka/Documents/GitHub/ident_greet/glove.6B.50d.txt.gz
-    fname2 = './glove.6B.50d.txt'
+    fname2 = './glove.6B.50d.dat'
 
     word_to_index, index_to_word, word_to_vec_map = read_glove_vecs(fname2)
     

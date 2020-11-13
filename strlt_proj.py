@@ -549,7 +549,7 @@ def main():
                 out = label_to_type(pred[0])
                 st.write('Probability is ',str(pred[0]))
                 st.write('Your sentence ', out.lower())
-                st.write('For an even better performance checkout the LSTM model')
+                st.write('For an even better performance, checkout the LSTM model')
                 user_data=[]
         
 
@@ -560,21 +560,20 @@ def main():
             user_data = st.text_input("Enter sentence here: ",key="lstm_loaded")
             try:
                 
-                # # load json and create model
-                # jf = open(fname.replace('h5','json'), 'r')
-                # model_json = jf.read()
-                # jf.close()
-                # model = model_from_json(model_json)
-                
-                # # load weights into new model
-                # model.load_weights(fname)
-                
-
                 if (user_data):
                     
                     # load model
                     fname = './trained_models_lstm.keras'
                     model = load_model(fname)
+                    
+                    # # load json and create model
+                    # jf = open(fname.replace('h5','json'), 'r')
+                    # model_json = jf.read()
+                    # jf.close()
+                    # model = model_from_json(model_json)
+                
+                    # # load weights into new model
+                    # model.load_weights(fname)
                     
                     maxLen = 10
                     

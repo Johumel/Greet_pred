@@ -265,7 +265,7 @@ def main():
     w1 = load_variables('./word_to_vec_map_1.pickle')
     w2 = load_variables('./word_to_vec_map_2.pickle')
     word_to_vec_map = w1.update(w2)
-    st.write(word_to_vec_map['unknown'])
+    st.text(word_to_vec_map['unknown'])
     
     build_model = st.sidebar.checkbox("Check to build model otherwise pretrained model will be loaded")
     

@@ -500,14 +500,16 @@ def main():
                 user_data = []
             
         elif (choose_model == "LSTM"):
- 
+            model = []
             #request user input
             user_data = []
             user_data = st.text_input("Enter sentence here: ",key="lstm_built")
             if 	user_data:
                 
+                if not model:
+                    
                 #buidl model and make predictions
-                model = build_lstm_model()
+                    model = build_lstm_model()
             
                 maxLen = 10
             
@@ -588,13 +590,16 @@ def main():
                     st.write('Your sentence ', out.lower()) 
                     user_data=[]
             except:
+                model = []
                 st.write("whoops! I couldn't load the lstm model into streamlit.")
                 # user_data = []
                 
                 # #request user input
                 # user_data = st.text_input("Enter sentence here: ",key="lstm_built")
+
                 if 	user_data:
-                    model = build_lstm_model()
+                    if not model:
+                        model = build_lstm_model()
                 
                     maxLen = 10
                     #load word vector map

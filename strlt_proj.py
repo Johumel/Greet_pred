@@ -507,7 +507,7 @@ def main():
             # load model
             fname = './trained_models_lstm.keras'
             
-            model = load_model(fname)
+            model = load_model(fname,compile=False)
              
             # # load json and create model
             # jf = open(fname.replace('h5','json'), 'r')

@@ -1,2 +1,3 @@
 mpu
 h5py
+keras

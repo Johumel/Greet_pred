@@ -219,7 +219,7 @@ def model_we(X, Y, word_to_vec_map, learning_rate = 0.01, num_iterations = 400):
             # Average the word vectors of the words from the i'th training example
             avg = sentence_to_avg(X[i], word_to_vec_map)
     
-            # Forward propagate the avg through the softmax layer
+            # Forward propagate the avg through the sigmoid layer
             z = np.dot(W,avg)+b
             a = sigmoid(z)
     
@@ -263,6 +263,7 @@ def pel(word_to_vec_map, word_to_index):
     # Set each row "idx" of the embedding matrix to be 
     # the word vector representation of the idx'th word of the vocabulary
     for word, idx in word_to_index.items():
+        
         #set the embeddings of unknown words
         try:
             fd = word_to_vec_map[word]
@@ -298,12 +299,12 @@ def s_2_i(X, word_to_index, max_len):
     
     m = X.shape[0]   # number of training examples
     
-    # Initialize X_indices as a numpy matrix of zeros and the correct shape (≈ 1 line)
+    # Initialize X_indices as a numpy matrix of zeros
     X_indices = np.zeros((m,max_len))
     
     for i in range(m):     # loop over training examples
         
-        # Convert the ith training sentence in lower case and split is into words. You should get a list of words.
+        # Convert the ith training sentence in lower case and split is into words.
         sentence_words = [k.lower() for k in X[i].split()]
         
         # Initialize j to 0
@@ -312,6 +313,7 @@ def s_2_i(X, word_to_index, max_len):
         # Loop over the words of sentence_words
         for w in sentence_words:
             if j< max_len:
+                
                 # Set the (i,j)th entry of X_indices to the index of the correct word.
                 try:
                     fd = word_to_index[w]
@@ -405,7 +407,6 @@ def load_input():
         
     
     #load word embeddings
-    #word embeddings download from https://github.com/uclnlp/inferbeddings/blob/master/data/glove/
     w1 = load_variables('./word_to_vec_map_1.pickle')
     w2 = load_variables('./word_to_vec_map_2.pickle')
     word_to_vec_map = w1.copy()
@@ -419,15 +420,14 @@ def load_input():
 def build_we_model():
     
     X_train,Y_train,X_test,Y_test,word_to_vec_map,_ = load_input()
+    
     #train your model
-    # st.text("Building WE model .... ")
     with st.spinner("Building WE model"):
         pred, W, b = model_we(X_train, Y_train, word_to_vec_map)
         st.text("Done building WE model ")
     
     #evaluate model performance
     with st.spinner("Evaluating model performance"):
-    # st.text("Evaluating model performance .... ")
         pred_train,accur_train = predict(X_train, Y_train, W, b, word_to_vec_map)
         pred_test,accur_test = predict(X_test, Y_test, W, b, word_to_vec_map)
         st.text("Accuracy of training set is: ")
@@ -448,17 +448,14 @@ def build_lstm_model():
     
     X_train,Y_train,X_test,Y_test,word_to_vec_map,word_to_index = load_input()
     
-    #st.text("Building lstm model .... ")
     with st.spinner("Building lstm model"):
         model = model_lstm(X_train,Y_train,maxLen, word_to_vec_map, word_to_index)
         st.text("Done building lstm model ")
     
-    #evaluate model on test set
     X_test_indices = s_2_i(X_test, word_to_index, maxLen)
     Y_test_oh = np.asarray([[i] for i in Y_test])
     
     with st.spinner("Evaluating model performance"):
-        # st.text("Evaluating model performance .... ")
         loss, acc = model.evaluate(X_test_indices, Y_test_oh)
         st.text("Accuracy of test set is: ")
         st.write(round(acc,2))
@@ -500,12 +497,12 @@ def main():
                 user_data = []
             
         elif (choose_model == "LSTM"):
+            
             #request user input
             user_data = []
             user_data = st.text_input("Enter sentence here: ",key="lstm_built")
             if 	user_data:
                 
-                    
                 #buidl model and make predictions
                 model = build_lstm_model()
             
@@ -593,7 +590,7 @@ def main():
                 # user_data = []
                 
                 # #request user input
-                # user_data = st.text_input("Enter sentence here: ",key="lstm_built")
+                #user_data = st.text_input("Enter sentence here: ",key="lstm_built")
 
                 if 	user_data:
                     

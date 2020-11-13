@@ -587,10 +587,10 @@ def main():
                     user_data=[]
             except:
                 st.write("whoops! I couldn't load the lstm model into streamlit.")
-                user_data = []
+                # user_data = []
                 
-                #request user input
-                user_data = st.text_input("Enter sentence here: ",key="lstm_built")
+                # #request user input
+                # user_data = st.text_input("Enter sentence here: ",key="lstm_built")
                 if 	user_data:
                     model = build_lstm_model()
                 

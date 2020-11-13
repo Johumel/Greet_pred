@@ -17,7 +17,7 @@ def read_glove_vecs(glove_file):
         word_to_vec_map = {}
         i = 0
         for line in f:
-            if i>0:
+            if i>1:
                 line = line.strip().split()
                 curr_word = line[0]
                 words.add(curr_word)

@@ -144,7 +144,7 @@ def predict(X, Y, W, b, word_to_vec_map):
     
     return pred,accur
 
-def sentence_to_avg(sentence, word_to_vec_map,i):
+def sentence_to_avg(sentence, word_to_vec_map):
     """
     Converts a sentence (string) into a list of words (strings). Extracts the GloVe representation of each word
     and averages its value into a single vector encoding the meaning of the sentence.

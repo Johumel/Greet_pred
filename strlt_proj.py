@@ -8,10 +8,11 @@ Created on Wed Nov 11 22:06:57 2020
 
 import streamlit as st
 import numpy as np
+import json
 import csv
 import h5py
 import mpu
-from keras.models import Model,load_model
+from keras.models import Model,load_model,model_from_json
 from keras.layers import Dense, Input, Dropout, LSTM, Activation
 from keras.layers.embeddings import Embedding
 from keras.preprocessing import sequence
@@ -379,8 +380,6 @@ def model_lstm(X_train,Y_train,maxLen, word_to_vec_map, word_to_index):
     #train the model for 50 epochs with minibatching
     model.fit(X_train_indices, Y_train_oh, epochs = 20, batch_size = 32, shuffle=True)
         
-    fname = 'trained_models_lstm_v2.h5'
-    model.save(fname)
     
     return model
 
@@ -509,7 +508,17 @@ def main():
             
             # load model
             fname = './trained_models_lstm_v2.h5'
-            model = load_model(fname)
+            
+            # # model = load_model(fname)
+             
+            # load json and create model
+            jf = open(fname.replace('h5','json'), 'r')
+            model_json = json_file.read()
+            jf.close()
+            model = model_from_json(model_json)
+            
+            # load weights into new model
+            model.load_weights(fname)
             
             #request user input
             user_data=[]

@@ -39,6 +39,7 @@ def read_glove_vecs(glove_file):
 
 
 def sigmoid(x):
+    """Compute sigmoid values for each sets of scores in x."""
     return 1 / (1 + np.exp(-x))
 
 def read_csv(fname):
@@ -59,6 +60,15 @@ def read_csv(fname):
 
 
 def cleanX(X):
+    """clean input sentence to remove special characters and punctuations
+    
+    Arguments:
+    X -- input data containing sentences
+    
+    Returns:
+    X -- cleaned version of input data
+    """
+    
     for h in range(len(X)):
         i = X[h]
         nh = i.split()
@@ -85,6 +95,9 @@ def cleanX(X):
 
               
 def label_to_type(label):
+    """
+    Converts a label into prediction string
+    """
     if label >= 0.5:
         return 'contains a Greeting'
     else:
@@ -93,14 +106,15 @@ def label_to_type(label):
 
 def predict(X, Y, W, b, word_to_vec_map):
     """
-    Given X (sentences) and Y (emoji indices), predict emojis and compute the accuracy of your model over the given set.
+    Given X (sentences) and Y (greeting indicator), predict if it contains a 
+    greeting and compute the accuracy of your model over the given set.
     
     Arguments:
-    X -- input data containing sentences, numpy array of shape (m, None)
-    Y -- labels, containing index of the label emoji, numpy array of shape (m, 1)
+    X -- input data containing sentences
+    Y -- labels
     
     Returns:
-    pred -- numpy array of shape (m, 1) with your predictions
+    pred -- numpy array with your predictions
     """
     m = X.shape[0]
     pred = np.zeros((m, 1))
@@ -140,7 +154,7 @@ def sentence_to_avg(sentence, word_to_vec_map,i):
     word_to_vec_map -- dictionary mapping every word in a vocabulary into its 50-dimensional vector representation
     
     Returns:
-    avg -- average vector encoding information about the sentence, numpy-array of shape (50,)
+    avg -- average vector encoding information about the sentence
     """
     
     #split the words in the sentence
@@ -175,16 +189,16 @@ def model_we(X, Y, word_to_vec_map, learning_rate = 0.01, num_iterations = 400):
     Model to train word vector representations in numpy.
     
     Arguments:
-    X -- input data, numpy array of sentences as strings, of shape (m, 1)
-    Y -- labels, numpy array of integers between 0 and 7, numpy-array of shape (m, 1)
+    X -- input data, numpy array of sentences as strings
+    Y -- labels, numpy array of integers between 0 and 1
     word_to_vec_map -- dictionary mapping every word in a vocabulary into its 50-dimensional vector representation
     learning_rate -- learning_rate for the stochastic gradient descent algorithm
     num_iterations -- number of iterations
     
     Returns:
-    pred -- vector of predictions, numpy-array of shape (m, 1)
-    W -- weight matrix of the softmax layer, of shape (n_y, n_h)
-    b -- bias of the softmax layer, of shape (n_y,)
+    pred -- vector of predictions
+    W -- weight matrix of the softmax layer
+    b -- bias of the softmax layer
     """
     
     # Define number of training examples
@@ -233,7 +247,7 @@ def pel(word_to_vec_map, word_to_index):
     
     Arguments:
     word_to_vec_map -- dictionary mapping words to their GloVe vector representation.
-    word_to_index -- dictionary mapping from words to their indices in the vocabulary (400,001 words)
+    word_to_index -- dictionary mapping from words to their indices in the vocabulary
 
     Returns:
     embedding_layer -- pretrained layer Keras instance
@@ -269,15 +283,15 @@ def pel(word_to_vec_map, word_to_index):
 def s_2_i(X, word_to_index, max_len):
     """
     Converts an array of sentences (strings) into an array of indices corresponding to words in the sentences.
-    The output shape should be such that it can be given to `Embedding()` (described in Figure 4). 
+    The output shape should be such that it can be given to `Embedding()`. 
     
     Arguments:
-    X -- array of sentences (strings), of shape (m, 1)
+    X -- array of sentences 
     word_to_index -- a dictionary containing the each word mapped to its index
-    max_len -- maximum number of words in a sentence. You can assume every sentence in X is no longer than this. 
+    max_len -- maximum number of words in a sentence.  
     
     Returns:
-    X_indices -- array of indices corresponding to words in the sentences from X, of shape (m, max_len)
+    X_indices -- array of indices corresponding to words in the sentences from X
     """
     
     m = X.shape[0]                                   # number of training examples
@@ -308,13 +322,15 @@ def s_2_i(X, word_to_index, max_len):
 
 # @st.cache()
 def model_lstm(X,train,Y_train,maxLen, word_to_vec_map, word_to_index):
-    """
-    Function creating the Emojify-v2 model's graph.
+    """    
+    build a greeting identifier model
     
     Arguments:
-    input_shape -- shape of the input, usually (max_len,)
+    input_shape -- shape of the input
     word_to_vec_map -- dictionary mapping every word in a vocabulary into its 50-dimensional vector representation
-    word_to_index -- dictionary mapping from words to their indices in the vocabulary (400,001 words)
+    word_to_index -- dictionary mapping from words to their indices in the vocabulary 
+    X_train --- training input data set
+    Y_train --- training labels
 
     Returns:
     model -- a model instance in Keras
@@ -436,7 +452,7 @@ def main():
         
         elif (choose_model == "LSTM"):
             st.text("Building lstm model .... ")
-            model = model_lstm(X_train,Y_train,maxLen, word_to_vec_map, word_to_index)
+            model = model_lstm(X,train,Y_train,maxLen, word_to_vec_map, word_to_index)
             st.text("Done building lstm model ")
             
             #evaluate model on test set

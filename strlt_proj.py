@@ -18,7 +18,6 @@ from keras.preprocessing import sequence
 from keras.initializers import glorot_uniform
 
 
-
 def read_glove_vecs(glove_file):
     with open(glove_file, 'r') as f:
         words = set()
@@ -373,7 +372,7 @@ def load_variables(fname):
     return x
 
 def main():
-    st.title("Identify the presence of Greetings")
+    st.title("Identify the presence of a Greetings")
     
     #load data set
     fname = './tagged_selections_by_sentence.csv'

@@ -6,6 +6,7 @@ Created on Wed Nov 11 22:06:57 2020
 @author: john.onwuemeka
 """
 
+import tensorflow.keras.backend as K
 import streamlit as st
 import numpy as np
 import csv
@@ -14,8 +15,6 @@ import mpu
 from keras.models import Model,load_model,model_from_json
 from keras.layers import Dense, Input, Dropout, LSTM, Activation
 from keras.layers.embeddings import Embedding
-from keras.preprocessing import sequence
-from keras.initializers import glorot_uniform
 
 
 def read_glove_vecs(glove_file):
@@ -506,18 +505,18 @@ def main():
         elif(choose_model == "LSTM"):
             
             # load model
-            fname = './trained_models_lstm_v2.h5'
+            fname = './trained_models_lstm.h5'
             
-            # # model = load_model(fname)
+            model = load_model(fname)
              
-            # load json and create model
-            jf = open(fname.replace('h5','json'), 'r')
-            model_json = jf.read()
-            jf.close()
-            model = model_from_json(model_json)
+            # # load json and create model
+            # jf = open(fname.replace('h5','json'), 'r')
+            # model_json = jf.read()
+            # jf.close()
+            # model = model_from_json(model_json)
             
-            # load weights into new model
-            model.load_weights(fname)
+            # # load weights into new model
+            # model.load_weights(fname)
             
             #request user input
             user_data=[]

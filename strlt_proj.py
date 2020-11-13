@@ -91,6 +91,7 @@ def cleanX(X):
             else:
                 new_nh.append(j)
         X[h] = ' '.join(new_nh)
+    X = np.asarray([x if len(x.strip()) > 0 else 'empty input' for x in X])
     return X
 
               
@@ -183,7 +184,6 @@ def sentence_to_avg(sentence, word_to_vec_map):
     return avg
 
 #Build the predictor model
-# @st.cache()
 def model_we(X, Y, word_to_vec_map, learning_rate = 0.01, num_iterations = 400):
     """
     Model to train word vector representations in numpy.
@@ -321,7 +321,7 @@ def s_2_i(X, word_to_index, max_len):
     return X_indices
 
 # @st.cache()
-def model_lstm(X,train,Y_train,maxLen, word_to_vec_map, word_to_index):
+def model_lstm(X_train,Y_train,maxLen, word_to_vec_map, word_to_index):
     """    
     build a greeting identifier model
     
@@ -394,6 +394,7 @@ def main():
     
     #clean-up dataset
     X_ = cleanX(X_)
+
     
     #split data set into training and test sets    
     ll = int(np.ceil(len(X_)*0.8))
@@ -452,7 +453,7 @@ def main():
         
         elif (choose_model == "LSTM"):
             st.text("Building lstm model .... ")
-            model = model_lstm(X,train,Y_train,maxLen, word_to_vec_map, word_to_index)
+            model = model_lstm(X_train,Y_train,maxLen, word_to_vec_map, word_to_index)
             st.text("Done building lstm model ")
             
             #evaluate model on test set

@@ -485,7 +485,7 @@ def main():
         elif(choose_model == "LSTM"):
             
             # load model
-            fname = './trained_model_lstm.h5'
+            fname = './trained_models_lstm.h5'
             model = load_model(fname)
             
             #request user input

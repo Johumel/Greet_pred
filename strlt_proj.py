@@ -415,7 +415,7 @@ def load_input():
     
     return X_train,Y_train,X_test,Y_test,word_to_vec_map,word_to_index
     
-
+@st.static
 def build_we_model():
     
     X_train,Y_train,X_test,Y_test,word_to_vec_map,_ = load_input()
@@ -438,7 +438,7 @@ def build_we_model():
     
     return W,b
 
-
+@st.static
 def build_lstm_model():
     
     #set maxlen as the length of the longest sentence

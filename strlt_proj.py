@@ -183,6 +183,7 @@ def sentence_to_avg(sentence, word_to_vec_map):
 
 #Build the predictor model
 def model_we(X, Y, word_to_vec_map, learning_rate = 0.01, num_iterations = 400):
+    
     """
     Model to train word vector representations in numpy.
     
@@ -235,9 +236,10 @@ def model_we(X, Y, word_to_vec_map, learning_rate = 0.01, num_iterations = 400):
         
         if t % 100 == 0:
             print("Epoch: " + str(t) + " --- cost = " + str((cost/m)[0]))
-            pred,_ = predict(X, Y, W, b, word_to_vec_map) #predict is defined in emo_utils.py
+            pred,_ = predict(X, Y, W, b, word_to_vec_map) 
 
     return pred, W, b
+
 
 def pel(word_to_vec_map, word_to_index):
     """
@@ -277,6 +279,7 @@ def pel(word_to_vec_map, word_to_index):
     embedding_layer.set_weights([emb_matrix])
     
     return embedding_layer
+
 
 def s_2_i(X, word_to_index, max_len):
     """
@@ -318,7 +321,7 @@ def s_2_i(X, word_to_index, max_len):
                 
     return X_indices
 
-# @st.cache()
+
 def model_lstm(X_train,Y_train,maxLen, word_to_vec_map, word_to_index):
     """    
     build a greeting identifier model
@@ -464,7 +467,7 @@ def build_lstm_model():
     return model
 
 def main():
-    st.title("Identify the presence of a Greetings")
+    st.title("Identify the presence of a Greeting")
     
     build_model = st.checkbox("Check to build model otherwise pretrained model will be loaded")
     if(build_model):

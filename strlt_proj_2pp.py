@@ -15,6 +15,7 @@ def read_glove_vecs(glove_file):
     with open(glove_file, 'r') as f:
         words = set()
         word_to_vec_map = {}
+        f = f[1:]
         for line in f:
             line = line.strip().split()
             curr_word = line[0]
@@ -249,8 +250,9 @@ def main():
         
     #load pre-trained word embeddings
     #word embeddings download from https://github.com/uclnlp/inferbeddings/blob/master/data/glove/
-    fname2 = './glove.6B.50d.dat'
-    
+    /Users/john.onwuemeka/Documents/GitHub/ident_greet/glove.6B.50d.txt.gz
+    fname2 = './glove.6B.50d.txt'
+
     word_to_index, index_to_word, word_to_vec_map = read_glove_vecs(fname2)
     
     build_model = st.sidebar.checkbox("Check to build model otherwise pretrained model will be loaded")

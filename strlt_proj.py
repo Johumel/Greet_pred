@@ -466,7 +466,7 @@ def main():
             ft = h5py.File(filename,'r')
             W = ft['W']
             b = ft['b']
-            ft.close()
+            
             
             #request user input
             user_data=[]

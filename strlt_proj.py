@@ -118,9 +118,9 @@ def predict(X, Y, W, b, word_to_vec_map):
     m = X.shape[0]
     pred = np.zeros((m, 1))
     
-    for j in range(m):                       # Loop over training examples
+    for j in range(m):  # Loop over training examples
         
-        # Split jth test example (sentence) into list of lower case words
+        # Split jth test example into list of lower case words
         words = X[j].lower().split()
         
         # Average words' vectors
@@ -165,12 +165,13 @@ def sentence_to_avg(sentence, word_to_vec_map):
     except:
         fd = word_to_vec_map['unknown']
         
-    # Initialize the average word vector, should have the same shape as your word vectors.
+    # Initialize the average word vector
     avg = np.zeros(fd.shape) 
 
-    # average the word vectors..
+    # average the word vectors
     total = np.zeros(avg.shape).tolist()
     for w in words:
+        
         #set the embeddings of unknown words
         try:
             fd = word_to_vec_map[w]
@@ -181,7 +182,7 @@ def sentence_to_avg(sentence, word_to_vec_map):
     
     return avg
 
-#Build the predictor model
+@st.cache()
 def model_we(X, Y, word_to_vec_map, learning_rate = 0.01, num_iterations = 400):
     
     """
@@ -205,7 +206,7 @@ def model_we(X, Y, word_to_vec_map, learning_rate = 0.01, num_iterations = 400):
     n_y = 1                                 # number of classes  
     n_h = 50                                # dimensions of the GloVe vectors 
     
-    # Initialize parameters using Xavier initialization
+    # Initialize parameters
     W = np.random.randn(n_y, n_h) / np.sqrt(n_h)
     b = np.zeros((n_y,))
     
@@ -295,12 +296,12 @@ def s_2_i(X, word_to_index, max_len):
     X_indices -- array of indices corresponding to words in the sentences from X
     """
     
-    m = X.shape[0]                                   # number of training examples
+    m = X.shape[0]   # number of training examples
     
     # Initialize X_indices as a numpy matrix of zeros and the correct shape (≈ 1 line)
     X_indices = np.zeros((m,max_len))
     
-    for i in range(m):                               # loop over training examples
+    for i in range(m):     # loop over training examples
         
         # Convert the ith training sentence in lower case and split is into words. You should get a list of words.
         sentence_words = [k.lower() for k in X[i].split()]
@@ -321,7 +322,7 @@ def s_2_i(X, word_to_index, max_len):
                 
     return X_indices
 
-
+@st.cache()
 def model_lstm(X_train,Y_train,maxLen, word_to_vec_map, word_to_index):
     """    
     build a greeting identifier model
@@ -346,19 +347,18 @@ def model_lstm(X_train,Y_train,maxLen, word_to_vec_map, word_to_index):
     embedding_layer = pel(word_to_vec_map, word_to_index)
     
     # Propagate sentence_indices through your embedding layer
-    # (See additional hints in the instructions).
     embeddings =  embedding_layer(sentence_indices)
     
     # Propagate the embeddings through an LSTM layer with 128-dimensional hidden state
     X = LSTM(units = 128, return_sequences=True)(embeddings)
     
-    # Add dropout with a probability of 0.5
+    # Add dropout with a probability of 0.7
     X = Dropout(rate = 0.7 )(X)
     
     # Propagate X trough another LSTM layer with 128-dimensional hidden state
     X = LSTM(units = 128, return_sequences=False)(X)
     
-    # Add dropout with a probability of 0.5
+    # Add dropout with a probability of 0.7
     X = Dropout(rate = 0.7 )(X)
     
     # Propagate X through a Dense layer with 2 units
@@ -377,7 +377,7 @@ def model_lstm(X_train,Y_train,maxLen, word_to_vec_map, word_to_index):
     X_train_indices = s_2_i(X_train, word_to_index, maxLen)
     Y_train_oh = np.asarray([[i] for i in Y_train])
         
-    #train the model for 50 epochs with minibatching
+    #train the model for 20 epochs with minibatching
     model.fit(X_train_indices, Y_train_oh, epochs = 20, batch_size = 32, shuffle=True)
         
     
@@ -415,7 +415,7 @@ def load_input():
     
     return X_train,Y_train,X_test,Y_test,word_to_vec_map,word_to_index
     
-@st.static
+@st.cache()
 def build_we_model():
     
     X_train,Y_train,X_test,Y_test,word_to_vec_map,_ = load_input()
@@ -438,7 +438,7 @@ def build_we_model():
     
     return W,b
 
-@st.static
+@st.cache()
 def build_lstm_model():
     
     #set maxlen as the length of the longest sentence
@@ -500,16 +500,14 @@ def main():
                 user_data = []
             
         elif (choose_model == "LSTM"):
-            model = []
             #request user input
             user_data = []
             user_data = st.text_input("Enter sentence here: ",key="lstm_built")
             if 	user_data:
                 
-                if not model:
                     
                 #buidl model and make predictions
-                    model = build_lstm_model()
+                model = build_lstm_model()
             
                 maxLen = 10
             
@@ -590,7 +588,7 @@ def main():
                     st.write('Your sentence ', out.lower()) 
                     user_data=[]
             except:
-                model = []
+                
                 st.write("whoops! I couldn't load the lstm model into streamlit.")
                 # user_data = []
                 
@@ -598,8 +596,8 @@ def main():
                 # user_data = st.text_input("Enter sentence here: ",key="lstm_built")
 
                 if 	user_data:
-                    if not model:
-                        model = build_lstm_model()
+                    
+                    model = build_lstm_model()
                 
                     maxLen = 10
                     #load word vector map

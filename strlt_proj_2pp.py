@@ -235,7 +235,7 @@ def model(X, Y, word_to_vec_map, learning_rate = 0.01, num_iterations = 300):
 
 
 def load_variables(fname):
-    x = mpu.io.read(f)
+    x = mpu.io.read(fname)
     return x
 
 def main():

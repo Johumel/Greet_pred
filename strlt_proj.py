@@ -432,6 +432,7 @@ def main():
             pred,_ = predict(user_data, np.array([1]), W, b, word_to_vec_map)
             out = label_to_type(pred[0])
             st.write('Your sentence ', out.lower())
+            user_data=[]
         
         elif (choose_model == "LSTM"):
             st.text("Building lstm model .... ")
@@ -454,6 +455,7 @@ def main():
             pred = model.predict(X_indices)
             out = label_to_type(pred[0])
             st.write('Your sentence ', out.lower()) # Inverse transform to get the original dependent value. 
+            user_data=[]
     
     else:
         choose_model = st.sidebar.selectbox("Choose the NLP model",
@@ -481,6 +483,7 @@ def main():
                 out = label_to_type(pred[0])
                 st.write('Probability is ',str(pred[0]))
                 st.write('Your sentence ', out.lower())
+            user_data=[]
                 
         elif(choose_model == "LSTM"):
             
@@ -499,6 +502,7 @@ def main():
                 pred = model.predict(X_indices)
                 out = label_to_type(pred[0])
                 st.write('Your sentence ', out.lower()) 
+            user_data=[]
     
 if __name__ == "__main__":
     main()

@@ -9,8 +9,7 @@ Created on Wed Nov 11 22:06:57 2020
 import streamlit as st
 import numpy as np
 import csv
-import h5py
-import pickle
+import mpu
 
 def read_glove_vecs(glove_file):
     with open(glove_file, 'r') as f:
@@ -41,18 +40,18 @@ def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
 def read_csv(fname):
-    phrase = []
-    emoji = []
+    text = []
+    classy = []
 
     with open (fname) as csvDataFile:
         csvReader = csv.reader(csvDataFile)
 
         for row in csvReader:
-            phrase.append(row[6])
-            emoji.append(row[7])
+            text.append(row[6])
+            classy.append(row[7])
 
-    X = np.asarray(phrase)
-    Y = np.asarray(emoji, dtype=int)
+    X = np.asarray(text)
+    Y = np.asarray(classy, dtype=int)
 
     return X, Y
 
@@ -236,9 +235,7 @@ def model(X, Y, word_to_vec_map, learning_rate = 0.01, num_iterations = 300):
 
 
 def load_variables(fname):
-    f = open(fname,'r')
-    x = pickle.load(f)
-    f.close()
+    x = mpu.io.read(f)
     return x
 
 def main():
@@ -265,8 +262,8 @@ def main():
     
     # word_to_index, index_to_word, word_to_vec_map = read_glove_vecs(fname2)
     
-    w1 = load_variable('./word_to_vec_map.pickle1')
-    w2 = load_variable('./word_to_vec_map.pickle2')
+    w1 = load_variable('./word_to_vec_map_1.pickle')
+    w2 = load_variable('./word_to_vec_map_2.pickle')
     word_to_vec_map = w1.update(w2)
     
     index_to_word = load('./index_to_word.pickle')
@@ -306,11 +303,11 @@ def main():
     else:
         
         #load pretrained parameters
-        filename = './trained_models_we.h5'
+        filename = './trained_model_params.pickle'
     
-        ft = h5py.File(filename,'r')
-        W = ft['W']
-        b = ft['b']
+        gh = mpu.io.read(filename)
+        W = gh['W']
+        b = gh['b']
         
         #request user input
         user_data=[]
@@ -324,7 +321,6 @@ def main():
             pred,_ = predict(user_data, np.array([1]), W, b, word_to_vec_map)
             out = label_to_type(pred[0])
             st.write('Your sentence ', out.lower())
-        ft.close()
         
 if __name__ == "__main__":
     main()

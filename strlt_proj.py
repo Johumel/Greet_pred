@@ -586,7 +586,7 @@ def main():
                     user_data=[]
             except:
                 
-                st.write("whoops! I couldn't load the lstm model into streamlit.")
+                st.write("whoops! I couldn't load the trained model into streamlit.")
                 st.write("Will attempt again, otherwise I will build a model")
                 # user_data = []
                 

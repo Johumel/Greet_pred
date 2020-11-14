@@ -444,7 +444,7 @@ def build_lstm_model():
     #set maxlen as the length of the longest sentence
     #set to 10 because a greeting would most likely be
     #within the first few sentences
-    maxLen = 10 #len(max(X_train, key=len).split())
+    maxLen = 20 #len(max(X_train, key=len).split())
     
     X_train,Y_train,X_test,Y_test,word_to_vec_map,word_to_index = load_input()
     
@@ -506,7 +506,7 @@ def main():
                 #buidl model and make predictions
                 model = build_lstm_model()
             
-                maxLen = 10
+                maxLen = 20
             
                 #load word vector map
                 _,_,_,_,_,word_to_index = load_input()
@@ -572,7 +572,7 @@ def main():
                     # # load weights into new model
                     # model.load_weights(fname)
                     
-                    maxLen = 10
+                    maxLen = 20
                     
                     #load word vector map
                     _,_,_,_,_,word_to_index = load_input()
@@ -587,6 +587,7 @@ def main():
             except:
                 
                 st.write("whoops! I couldn't load the lstm model into streamlit.")
+                st.write("Will attempt again, otherwise I will build a model")
                 # user_data = []
                 
                 # #request user input
@@ -596,7 +597,7 @@ def main():
                     
                     model = build_lstm_model()
                 
-                    maxLen = 10
+                    maxLen = 20
                     #load word vector map
                     _,_,_,_,_,word_to_index = load_input()
                     

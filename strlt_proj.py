@@ -463,51 +463,124 @@ def build_lstm_model():
     
     return model
 
-def main():
-    st.title("Identify the presence of a Greeting")
+def WE(build_model):
     
-    build_model = st.sidebar.checkbox("Check to build model otherwise pretrained model will be loaded")
-    if(build_model):
-        choose_model = st.sidebar.selectbox("Choose the NLP model",
-        		[ "WE", "LSTM"])
+    if (build_model.lower()=='yes'):
+
+        #build a model
+        W,b = build_we_model()
         
-        if (choose_model == "WE"):
-            
-            #request user input
+        #load word vector map
+        _,_,_,_,word_to_vec_map,_ = load_input()
+        
+        #request user input
+        user_data = st.text_input("Enter sentence here: ",key="we_built")	
+        #clean up input
+        user_data = cleanX(np.array([user_data]))
+        
+        if user_data:
+            #make prediction
+            pred,_ = predict(user_data, np.array([1]), W, b, word_to_vec_map)
+            out = label_to_type(pred[0])
+            st.write('Probability is ',str(pred[0]))
+            st.write('Your sentence ', out.lower())
+            st.write('For an even better performance checkout the LSTM model')
             user_data = []
-            user_data = st.text_input("Enter sentence here: ",key="we_built")	
-            if user_data:
+    else:
+        #request user input
+        user_data=[]
+        user_data = st.text_input("Enter sentence here: ",key="we_loaded")
+        if(user_data):
+            
+            #load pretrained weights
+            filename = './trained_weights_we.h5'
+            ft = h5py.File(filename,'r')
+            W = ft['W']
+            b = ft['b']
+
+            #load word vector map
+            _,_,_,_,word_to_vec_map,_ = load_input()
+            
+            #clean up input
+            user_data = cleanX(np.array([user_data]))
+            
+            #make prediction
+            pred,_ = predict(user_data, np.array([1]), W, b, word_to_vec_map)
+            out = label_to_type(pred[0])
+            st.write('Probability is ',str(pred[0]))
+            st.write('Your sentence ', out.lower())
+            st.write('For an even better performance, checkout the LSTM model')
+            user_data=[]
+
+def LSTM_RNN(build_model):
+    
+    if (build_model.lower()=='yes'):
+        
+        #buidl model and make predictions
+        model = build_lstm_model()
+    
+        maxLen = 20
+    
+        #load word vector map
+        _,_,_,_,_,word_to_index = load_input()
+        
+        #request user input
+        user_data=[]
+        user_data = st.text_input("Enter sentence here: ",key="lstm_built")
+        
+        if user_data:
+            X_indices = s_2_i(cleanX(np.array([user_data])), word_to_index, maxLen)
+            pred = model.predict(X_indices)
+            out = label_to_type(pred[0])
+            st.write('Probability is ',str(pred[0]))
+            st.write('Your sentence ', out.lower()) 
+            user_data = []
+    else:
+        #request user input
+        user_data=[]
+        user_data = st.text_input("Enter sentence here: ",key="lstm_loaded")
+        try:           
+            if (user_data):
                 
-                #build a model
-                W,b = build_we_model()
+                # load model
+                fname = './trained_models_lstm.keras'
+                model = load_model(fname)
+                
+                # # load json and create model
+                # jf = open(fname.replace('h5','json'), 'r')
+                # model_json = jf.read()
+                # jf.close()
+                # model = model_from_json(model_json)
+            
+                # # load weights into new model
+                # model.load_weights(fname)
+                
+                maxLen = 20
                 
                 #load word vector map
-                _,_,_,_,word_to_vec_map,_ = load_input()
-                
-                #clean up input
-                user_data = cleanX(np.array([user_data]))
-        
-                #make prediction
-                pred,_ = predict(user_data, np.array([1]), W, b, word_to_vec_map)
+                _,_,_,_,_,word_to_index = load_input()
+            
+                # make prediction
+                X_indices = s_2_i(cleanX([user_data]), word_to_index, maxLen)
+                pred = model.predict(X_indices)
                 out = label_to_type(pred[0])
                 st.write('Probability is ',str(pred[0]))
-                st.write('Your sentence ', out.lower())
-                
-                st.write('For an even better performance checkout the LSTM model')
-                user_data = []
+                st.write('Your sentence ', out.lower()) 
+                user_data=[]
+        except:
             
-        elif (choose_model == "LSTM"):
+            st.write("whoops! I couldn't load the trained model into streamlit.")
+            st.write("Will attempt again, otherwise I will build a model")
+            # user_data = []
             
-            #request user input
-            user_data = []
-            user_data = st.text_input("Enter sentence here: ",key="lstm_built")
+            # #request user input
+            #user_data = st.text_input("Enter sentence here: ",key="lstm_built")
+
             if 	user_data:
                 
-                #buidl model and make predictions
                 model = build_lstm_model()
             
                 maxLen = 20
-            
                 #load word vector map
                 _,_,_,_,_,word_to_index = load_input()
                 
@@ -515,100 +588,28 @@ def main():
                 pred = model.predict(X_indices)
                 out = label_to_type(pred[0])
                 st.write('Probability is ',str(pred[0]))
-                st.write('Your sentence ', out.lower()) 
+                st.write('Your sentence ', out.lower())                 
                 user_data = []
+
+            pass
+          
+
+def main():
+
+    st.title("Identify the presence of a Greeting")
     
-    else:
-        choose_model = st.sidebar.selectbox("Choose the NLP model",
-        		[ "WE", "LSTM"])
-        
-        if (choose_model == "WE"):
-            
-            #request user input
-            user_data=[]
-            user_data = st.text_input("Enter sentence here: ",key="we_loaded")
-            if(user_data):
-                
-                #load pretrained weights
-                filename = './trained_weights_we.h5'
-                ft = h5py.File(filename,'r')
-                W = ft['W']
-                b = ft['b']
+    build_model = st.sidebar.radio("Choose 'No' to use pretrained model or 'Yes' to train a model",['No','Yes'])
+    optionss = [
+        "WE",
+        "RNN with LSTM"]
 
-                #load word vector map
-                _,_,_,_,word_to_vec_map,_ = load_input()
-                
-                #clean up input
-                user_data = cleanX(np.array([user_data]))
-                
-                #make prediction
-                pred,_ = predict(user_data, np.array([1]), W, b, word_to_vec_map)
-                out = label_to_type(pred[0])
-                st.write('Probability is ',str(pred[0]))
-                st.write('Your sentence ', out.lower())
-                st.write('For an even better performance, checkout the LSTM model')
-                user_data=[]
-        
+    page = st.sidebar.radio("Choose the NLP model", optionss)   
+    # st.write(page)
+    if page == 'WE':
+        WE(build_model)
+    elif page == 'RNN with LSTM':
+        LSTM_RNN(build_model)
 
-        elif(choose_model == "LSTM"):
-            
-            #request user input
-            user_data=[]
-            user_data = st.text_input("Enter sentence here: ",key="lstm_loaded")
-            try:
-                
-                if (user_data):
-                    
-                    # load model
-                    fname = './trained_models_lstm.keras'
-                    model = load_model(fname)
-                    
-                    # # load json and create model
-                    # jf = open(fname.replace('h5','json'), 'r')
-                    # model_json = jf.read()
-                    # jf.close()
-                    # model = model_from_json(model_json)
-                
-                    # # load weights into new model
-                    # model.load_weights(fname)
-                    
-                    maxLen = 20
-                    
-                    #load word vector map
-                    _,_,_,_,_,word_to_index = load_input()
-                
-                    # make prediction
-                    X_indices = s_2_i(cleanX([user_data]), word_to_index, maxLen)
-                    pred = model.predict(X_indices)
-                    out = label_to_type(pred[0])
-                    st.write('Probability is ',str(pred[0]))
-                    st.write('Your sentence ', out.lower()) 
-                    user_data=[]
-            except:
-                
-                st.write("whoops! I couldn't load the trained model into streamlit.")
-                st.write("Will attempt again, otherwise I will build a model")
-                # user_data = []
-                
-                # #request user input
-                #user_data = st.text_input("Enter sentence here: ",key="lstm_built")
-
-                if 	user_data:
-                    
-                    model = build_lstm_model()
-                
-                    maxLen = 20
-                    #load word vector map
-                    _,_,_,_,_,word_to_index = load_input()
-                    
-                    X_indices = s_2_i(cleanX(np.array([user_data])), word_to_index, maxLen)
-                    pred = model.predict(X_indices)
-                    out = label_to_type(pred[0])
-                    st.write('Probability is ',str(pred[0]))
-                    st.write('Your sentence ', out.lower())                 
-                    user_data = []
-
-                pass
     
 if __name__ == "__main__":
     main()

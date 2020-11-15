@@ -571,16 +571,12 @@ def LSTM_RNN(build_model):
             
             st.write("whoops! I couldn't load the trained model into streamlit.")
             st.write("Will attempt again, otherwise I will build a model")
-            # user_data = []
-            
-            # #request user input
-            #user_data = st.text_input("Enter sentence here: ",key="lstm_built")
-
             if 	user_data:
                 
                 model = build_lstm_model()
             
                 maxLen = 20
+                
                 #load word vector map
                 _,_,_,_,_,word_to_index = load_input()
                 

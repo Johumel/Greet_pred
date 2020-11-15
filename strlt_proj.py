@@ -324,7 +324,7 @@ def s_2_i(X, word_to_index, max_len):
                 
     return X_indices
 
-@st.cache()
+# @st.cache()
 def model_lstm(X_train,Y_train,maxLen, word_to_vec_map, word_to_index):
     """    
     build a greeting identifier model
@@ -416,7 +416,7 @@ def load_input():
     
     return X_train,Y_train,X_test,Y_test,word_to_vec_map,word_to_index
     
-@st.cache()
+@st.cache(suppress_st_warning=True)
 def build_we_model():
     
     X_train,Y_train,X_test,Y_test,word_to_vec_map,_ = load_input()
@@ -438,7 +438,7 @@ def build_we_model():
     
     return W,b
 
-@st.cache()
+@st.cache(suppress_st_warning=True)
 def build_lstm_model():
     
     #set maxlen as the length of the longest sentence

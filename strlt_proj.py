@@ -466,7 +466,7 @@ def build_lstm_model():
 def main():
     st.title("Identify the presence of a Greeting")
     
-    build_model = st.checkbox("Check to build model otherwise pretrained model will be loaded")
+    build_model = st.sidebar.checkbox("Check to build model otherwise pretrained model will be loaded")
     if(build_model):
         choose_model = st.sidebar.selectbox("Choose the NLP model",
         		[ "WE", "LSTM"])

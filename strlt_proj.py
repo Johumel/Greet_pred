@@ -539,7 +539,7 @@ def LSTM_RNN(build_model):
         #request user input
         user_data=[]
         user_data = st.text_input("Enter sentence here: ",key="lstm_loaded")
-        try:           
+        if1==1:#try:           
             if (user_data):
                 
                 # load model
@@ -567,27 +567,27 @@ def LSTM_RNN(build_model):
                 st.write('Probability is ',str(pred[0]))
                 st.write('Your sentence ', out.lower()) 
                 user_data=[]
-        except:
+        # except:
             
-            st.write("whoops! I couldn't load the trained model into streamlit.")
-            st.write("Will attempt again, otherwise I will build a model")
-            if 	user_data:
+        #     st.write("whoops! I couldn't load the trained model into streamlit.")
+        #     st.write("Will attempt again, otherwise I will build a model")
+        #     if 	user_data:
                 
-                model = build_lstm_model()
+        #         model = build_lstm_model()
             
-                maxLen = 20
+        #         maxLen = 20
                 
-                #load word vector map
-                _,_,_,_,_,word_to_index = load_input()
+        #         #load word vector map
+        #         _,_,_,_,_,word_to_index = load_input()
                 
-                X_indices = s_2_i(cleanX(np.array([user_data])), word_to_index, maxLen)
-                pred = model.predict(X_indices)
-                out = label_to_type(pred[0])
-                st.write('Probability is ',str(pred[0]))
-                st.write('Your sentence ', out.lower())                 
-                user_data = []
+        #         X_indices = s_2_i(cleanX(np.array([user_data])), word_to_index, maxLen)
+        #         pred = model.predict(X_indices)
+        #         out = label_to_type(pred[0])
+        #         st.write('Probability is ',str(pred[0]))
+        #         st.write('Your sentence ', out.lower())                 
+        #         user_data = []
 
-            pass
+        #     pass
           
 
 def main():

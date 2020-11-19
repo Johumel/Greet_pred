@@ -539,7 +539,7 @@ def LSTM_RNN(build_model):
         #request user input
         user_data=[]
         user_data = st.text_input("Enter sentence here: ",key="lstm_loaded")
-        if1==1:#try:           
+        if 1==1:#try:           
             if (user_data):
                 
                 # load model

@@ -355,13 +355,13 @@ def model_lstm(X_train,Y_train,maxLen, word_to_vec_map, word_to_index):
     X = LSTM(units = 128, return_sequences=True)(embeddings)
     
     # Add dropout with a probability of 0.7
-    X = Dropout(rate = 0.5 )(X)
+    X = Dropout(rate = 0.7 )(X)
     
     # Propagate X trough another LSTM layer with 128-dimensional hidden state
     X = LSTM(units = 128, return_sequences=False)(X)
     
     # Add dropout with a probability of 0.7
-    X = Dropout(rate = 0.5 )(X)
+    X = Dropout(rate = 0.7 )(X)
     
     # Propagate X through a Dense layer with 2 units
     X = Dense(1)(X)

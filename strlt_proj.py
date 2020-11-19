@@ -561,7 +561,7 @@ def LSTM_RNN(build_model):
                 _,_,_,_,_,word_to_index = load_input()
             
                 # make prediction
-                X_indices = s_2_i(cleanX([user_data]), word_to_index, maxLen)
+                X_indices = s_2_i(cleanX(np.array([user_data])), word_to_index, maxLen)
                 pred = model.predict(X_indices)
                 out = label_to_type(pred[0])
                 st.write('Probability is ',str(pred[0]))
